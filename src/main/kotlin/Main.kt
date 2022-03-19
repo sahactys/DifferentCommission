@@ -8,6 +8,7 @@ const val MIN_COMMISSION: Int = 3500
 fun main() {
     var paymentSystemChoice: Int
     var sum: Int
+    var sumPastTransfer=0
     println("Введите сумму перевода")
     while (true) {
         try {
@@ -41,33 +42,7 @@ fun main() {
         5 -> PaymentSystem.Mir
         else -> error("Неизвестная плаежная система")
     }
-    calculatingTheCommission(sum, 0, paymentSystem)
-}
-
-fun calculatingTheCommission(
-    sum: Int,
-    sumPastTransfer: Int = 0,
-    paymentSystem: PaymentSystem = PaymentSystem.VkPay
-) {
-    val commission: Int
-    when (paymentSystem) {
-        PaymentSystem.VkPay -> output(sum)
-        PaymentSystem.Maestro, PaymentSystem.MasterCard -> {
-            if (sumPastTransfer in 30000..7500000) {
-                output(sum)
-            } else {
-                commission = (sum * 0.006 + CONSTANT_COMMISSION).toInt()
-                output(sum, commission)
-            }
-        }
-        PaymentSystem.Visa, PaymentSystem.Mir -> {
-            commission = if (sum * 0.0075 > MIN_COMMISSION) (sum * 0.0075).toInt() else MIN_COMMISSION
-            output(sum, commission)
-        }
-    }
-}
-
-fun output(sum: Int, commission: Int = 0) {
+    val commission=calculatingTheCommission(sum, sumPastTransfer, paymentSystem)
     if (commission == 0) {
         println("Комиссия не взымается")
         println("Сумма перевода " + sum / 100 + "руб. " + sum % 100 + "коп.")
@@ -75,4 +50,38 @@ fun output(sum: Int, commission: Int = 0) {
         println("Комиссия " + commission / 100 + "руб. " + commission % 100 + "коп.")
         println("Сумма перевода " + (sum - commission) / 100 + "руб. " + (sum - commission) % 100 + "коп.")
     }
+    sumPastTransfer+=sum - commission
 }
+
+fun calculatingTheCommission(
+    sum: Int,
+    sumPastTransfer: Int = 0,
+    paymentSystem: PaymentSystem = PaymentSystem.VkPay
+):Int {
+    val commission: Int
+    return when (paymentSystem) {
+        PaymentSystem.VkPay -> 0
+        PaymentSystem.Maestro, PaymentSystem.MasterCard -> {
+            if (sumPastTransfer in 30000..7500000) {
+                0
+            } else {
+                commission = (sum * 0.006 + CONSTANT_COMMISSION).toInt()
+                commission
+            }
+        }
+        PaymentSystem.Visa, PaymentSystem.Mir -> {
+            commission = if (sum * 0.0075 > MIN_COMMISSION) (sum * 0.0075).toInt() else MIN_COMMISSION
+            commission
+        }
+    }
+}
+
+//fun output(sum: Int, commission: Int = 0) {
+//    if (commission == 0) {
+//        println("Комиссия не взымается")
+//        println("Сумма перевода " + sum / 100 + "руб. " + sum % 100 + "коп.")
+//    } else {
+//        println("Комиссия " + commission / 100 + "руб. " + commission % 100 + "коп.")
+//        println("Сумма перевода " + (sum - commission) / 100 + "руб. " + (sum - commission) % 100 + "коп.")
+//    }
+//}
