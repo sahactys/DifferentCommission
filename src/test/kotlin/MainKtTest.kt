@@ -21,7 +21,7 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(0,result)
+        assertEquals(0, result)
     }
 
     @Test
@@ -36,7 +36,7 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(3500,result)
+        assertEquals(3500, result)
     }
 
     @Test
@@ -51,7 +51,7 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(2600,result)
+        assertEquals(2600, result)
     }
 
     @Test
@@ -66,7 +66,7 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(2600,result)
+        assertEquals(2600, result)
     }
 
     @Test
@@ -81,7 +81,7 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(3500,result)
+        assertEquals(3500, result)
     }
 
     @Test
@@ -93,7 +93,7 @@ class MainKtTest {
             sum = sum
         )
 
-        assertEquals(0,result)
+        assertEquals(0, result)
     }
 
     @Test
@@ -108,7 +108,7 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(0,result)
+        assertEquals(0, result)
     }
 
     @Test
@@ -123,13 +123,13 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(7500,result)
+        assertEquals(7500, result)
     }
 
     @Test
     fun calculatingTheCommission_Maestro_sumPastTransfer() {
         val sum = 100000
-        val sumPastTransfer = 30000
+        val sumPastTransfer = 75000000
         val paymentSystem: PaymentSystem = PaymentSystem.Maestro
 
         val result = calculatingTheCommission(
@@ -138,7 +138,53 @@ class MainKtTest {
             paymentSystem = paymentSystem
         )
 
-        assertEquals(0,result)
+        assertEquals(2600, result)
     }
 
+    @Test
+    fun output_comission_0() {
+        val sum = 300
+        val commission = 0
+
+        val result = output(
+            sum = sum,
+            commission = commission
+        )
+
+        assertEquals(
+            "Комиссия не взымается \n" +
+                    "Сумма перевода " + sum / 100 + "руб. " + sum % 100 + " коп.", result
+        )
+    }
+
+    @Test
+    fun output_commissionNotZero() {
+        val sum = 30000
+        val commission = 1000
+
+        val result = output(
+            sum = sum,
+            commission = commission
+        )
+
+        assertEquals(
+            "Комиссия " + commission / 100 + "руб. " + commission % 100 + " коп. \n" +
+                    "Сумма перевода " + (sum - commission) / 100 + "руб. " + (sum - commission) % 100 + "коп.", result
+        )
+    }
+
+    @Test
+    fun output_deault() {
+        val sum = 300
+
+        val result = output(
+            sum = sum,
+        )
+
+        assertEquals(
+            "Комиссия не взымается \n" +
+                    "Сумма перевода " + sum / 100 + "руб. " + sum % 100 + " коп.", result
+        )
+    }
 }
+

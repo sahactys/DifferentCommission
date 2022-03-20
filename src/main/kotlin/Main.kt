@@ -8,7 +8,7 @@ const val MIN_COMMISSION: Int = 3500
 fun main() {
     var paymentSystemChoice: Int
     var sum: Int
-    var sumPastTransfer=0
+    val sumPastTransfer=0
     println("Введите сумму перевода")
     while (true) {
         try {
@@ -43,14 +43,7 @@ fun main() {
         else -> error("Неизвестная плаежная система")
     }
     val commission=calculatingTheCommission(sum, sumPastTransfer, paymentSystem)
-    if (commission == 0) {
-        println("Комиссия не взымается")
-        println("Сумма перевода " + sum / 100 + "руб. " + sum % 100 + "коп.")
-    } else {
-        println("Комиссия " + commission / 100 + "руб. " + commission % 100 + "коп.")
-        println("Сумма перевода " + (sum - commission) / 100 + "руб. " + (sum - commission) % 100 + "коп.")
-    }
-    sumPastTransfer+=sum - commission
+    println(output(sum,commission))
 }
 
 fun calculatingTheCommission(
@@ -76,12 +69,12 @@ fun calculatingTheCommission(
     }
 }
 
-//fun output(sum: Int, commission: Int = 0) {
-//    if (commission == 0) {
-//        println("Комиссия не взымается")
-//        println("Сумма перевода " + sum / 100 + "руб. " + sum % 100 + "коп.")
-//    } else {
-//        println("Комиссия " + commission / 100 + "руб. " + commission % 100 + "коп.")
-//        println("Сумма перевода " + (sum - commission) / 100 + "руб. " + (sum - commission) % 100 + "коп.")
-//    }
-//}
+fun output(sum: Int, commission: Int = 0):String {
+    return if (commission == 0) {
+        ("Комиссия не взымается \n" +
+                "Сумма перевода " + sum / 100 + "руб. " + sum % 100 + " коп.")
+    } else {
+        ("Комиссия " + commission / 100 + "руб. " + commission % 100 + " коп. \n" +
+                "Сумма перевода " + (sum - commission) / 100 + "руб. " + (sum - commission) % 100 + "коп.")
+    }
+}
