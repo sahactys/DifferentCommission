@@ -72,7 +72,7 @@ fun calculatingTheCommission(
 fun output(sum: Int, commission: Int = 0):String {
     return if (commission == 0) {
         ("Комиссия не взымается \n" +
-                "Сумма перевода " + sum / 1000 + "руб. " + sum % 100 + " коп.")
+                "Сумма перевода " + sum / 100 + "руб. " + sum % 100 + " коп.")
     } else {
         ("Комиссия " + commission / 100 + "руб. " + commission % 100 + " коп. \n" +
                 "Сумма перевода " + (sum - commission) / 100 + "руб. " + (sum - commission) % 100 + "коп.")
